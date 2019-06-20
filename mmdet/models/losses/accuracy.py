@@ -1,5 +1,5 @@
 import torch.nn as nn
-
+import torch
 
 def accuracy(pred, target, topk=1):
     assert isinstance(topk, (int, tuple))
@@ -8,7 +8,13 @@ def accuracy(pred, target, topk=1):
         return_single = True
     else:
         return_single = False
-
+    indexes = torch.nonzero(target).squeeze()
+    target = target[indexes]
+    pred = pred[indexes]
+    if target.numel() == 0:
+        return 0.0
+    if pred.dim() == 1:
+        pred = pred.unsqueeze(dim=0)
     maxk = max(topk)
     _, pred_label = pred.topk(maxk, dim=1)
     pred_label = pred_label.t()
