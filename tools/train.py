@@ -2,19 +2,26 @@ from __future__ import division
 
 import argparse
 import os
-from mmcv import Config
 
+import torch
+from mmcv import Config
 from mmdet import __version__
-from mmdet.datasets import get_dataset
 from mmdet.apis import (train_detector, init_dist, get_root_logger,
                         set_random_seed)
+from mmdet.datasets import get_dataset
 from mmdet.models import build_detector
-import torch
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument('config', help='train config file path')
+    # parser.add_argument('--config', help='train config file path',
+    # #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/mask_rcnn_r101_fpn_1x.py")))
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py")))
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/faster_rcnn_r50_caffe_c4_1x.py")))
+    parser.add_argument('--config', help='train config file path',
+                        default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/faster_rcnn_r50_fpn_1x.py")))
     parser.add_argument('--work_dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume_from', help='the checkpoint file to resume from')
@@ -27,7 +34,7 @@ def parse_args():
         type=int,
         default=1,
         help='number of gpus to use '
-        '(only applicable to non-distributed training)')
+             '(only applicable to non-distributed training)')
     parser.add_argument('--seed', type=int, default=None, help='random seed')
     parser.add_argument(
         '--launcher',

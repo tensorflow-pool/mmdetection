@@ -102,8 +102,8 @@ def collect_results(result_part, size, tmpdir=None):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='MMDet test detector')
-    parser.add_argument('config', help='test config file path')
-    parser.add_argument('checkpoint', help='checkpoint file')
+    parser.add_argument('--config', help='test config file path', default="configs/fast_mask_rcnn_r101_fpn_1x.py")
+    parser.add_argument('--checkpoint', help='checkpoint file', default="checkpoints/mask_rcnn_r101_fpn_1x_20181129-34ad1961.pth")
     parser.add_argument('--out', help='output result file')
     parser.add_argument(
         '--eval',
