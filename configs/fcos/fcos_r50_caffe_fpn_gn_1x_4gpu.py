@@ -58,7 +58,7 @@ data_root = '/home/lijc08/datasets/coco_detectron/'
 img_norm_cfg = dict(
     mean=[102.9801, 115.9465, 122.7717], std=[1.0, 1.0, 1.0], to_rgb=False)
 data = dict(
-    imgs_per_gpu=4,
+    imgs_per_gpu=2,
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
@@ -70,7 +70,8 @@ data = dict(
         flip_ratio=0.5,
         with_mask=False,
         with_crowd=False,
-        with_label=True),
+        with_label=True,
+        limit=None),
     val=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/instances_val2014.json',
@@ -82,7 +83,7 @@ data = dict(
         with_mask=False,
         with_crowd=False,
         with_label=True,
-        limit=1000),
+        limit=500),
     test=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/instances_val2014.json',
@@ -94,7 +95,7 @@ data = dict(
         with_mask=False,
         with_label=False,
         test_mode=True,
-        limit=10))
+        limit=10000))
 # optimizer
 optimizer = dict(
     type='SGD',
@@ -113,7 +114,7 @@ lr_config = dict(
 checkpoint_config = dict(interval=1)
 # yapf:disable
 log_config = dict(
-    interval=50,
+    interval=20,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')

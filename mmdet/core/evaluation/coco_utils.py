@@ -27,7 +27,8 @@ def coco_eval(result_files, result_types, coco, max_dets=(100, 300, 1000)):
         assert result_file.endswith('.json')
 
         coco_dets = coco.loadRes(result_file)
-        img_ids = coco.getImgIds()
+        img_ids = list(coco_dets.imgToAnns.keys())
+        # img_ids = coco.getImgIds()
         iou_type = 'bbox' if res_type == 'proposal' else res_type
         cocoEval = COCOeval(coco, coco_dets, iou_type)
         cocoEval.params.imgIds = img_ids

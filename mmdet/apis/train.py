@@ -4,14 +4,15 @@ import re
 from collections import OrderedDict
 
 import torch
-from mmcv.runner import Runner, DistSamplerSeedHook, obj_from_dict
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
-
+from mmcv.runner import Runner, DistSamplerSeedHook, obj_from_dict
 from mmdet import datasets
 from mmdet.core import (DistOptimizerHook, DistEvalmAPHook,
                         CocoDistEvalRecallHook, CocoDistEvalmAPHook)
 from mmdet.datasets import build_dataloader
+from mmdet.datasets import get_dataset
 from mmdet.models import RPN
+
 from .env import get_root_logger
 
 
@@ -181,6 +182,17 @@ def _non_dist_train(model, dataset, cfg, validate=False):
             cfg.gpus,
             dist=False)
     ]
+    if validate:
+        val_dataset = get_dataset(cfg.data.val)
+        data_loaders += [
+            build_dataloader(
+                val_dataset,
+                cfg.data.imgs_per_gpu,
+                cfg.data.workers_per_gpu,
+                cfg.gpus,
+                dist=False)
+        ]
+        cfg.workflow += [('val', 1)]
     # put model on gpus
     model = MMDataParallel(model, device_ids=range(cfg.gpus)).cuda()
     # build runner
