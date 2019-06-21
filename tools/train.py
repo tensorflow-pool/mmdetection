@@ -14,14 +14,28 @@ from mmdet.models import build_detector
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    # parser.add_argument('--config', help='train config file path',
-    # #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/mask_rcnn_r101_fpn_1x.py")))
+
     # parser.add_argument('--config', help='train config file path',
     #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py")))
     # parser.add_argument('--config', help='train config file path',
     #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/faster_rcnn_r50_caffe_c4_1x.py")))
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/faster_rcnn_r50_fpn_1x.py")))
+
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/mask_rcnn_r50_fpn_1x.py")))
+
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/retinanet_r50_fpn_1x.py")))
+
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/guided_anchoring/ga_retinanet_r50_caffe_fpn_1x.py")))
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/guided_anchoring/ga_retinanet_x101_32x4d_fpn_1x.py")))
+
     parser.add_argument('--config', help='train config file path',
-                        default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/faster_rcnn_r50_fpn_1x.py")))
+                        default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/fcos/fcos_r50_caffe_fpn_gn_1x_4gpu.py")))
+
     parser.add_argument('--work_dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume_from', help='the checkpoint file to resume from')

@@ -5,10 +5,10 @@ import numpy as np
 from mmcv.parallel import DataContainer as DC
 from torch.utils.data import Dataset
 
+from .extra_aug import ExtraAugmentation
 from .transforms import (ImageTransform, BboxTransform, MaskTransform,
                          SegMapTransform, Numpy2Tensor)
 from .utils import to_tensor, random_scale
-from .extra_aug import ExtraAugmentation
 
 
 class CustomDataset(Dataset):
@@ -53,12 +53,15 @@ class CustomDataset(Dataset):
                  seg_scale_factor=1,
                  extra_aug=None,
                  resize_keep_ratio=True,
-                 test_mode=False):
+                 test_mode=False,
+                 limit=None):
         # prefix of images path
         self.img_prefix = img_prefix
 
         # load annotations (and proposals)
         self.img_infos = self.load_annotations(ann_file)
+        if limit is not None:
+            self.img_infos = self.img_infos[:limit]
         if proposal_file is not None:
             self.proposals = self.load_proposals(proposal_file)
         else:

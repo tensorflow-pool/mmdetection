@@ -7,9 +7,8 @@ import tempfile
 import mmcv
 import torch
 import torch.distributed as dist
-from mmcv.runner import load_checkpoint, get_dist_info
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
-
+from mmcv.runner import load_checkpoint, get_dist_info
 from mmdet.apis import init_dist
 from mmdet.core import results2json, coco_eval
 from mmdet.datasets import build_dataloader, get_dataset
@@ -64,7 +63,7 @@ def collect_results(result_part, size, tmpdir=None):
     if tmpdir is None:
         MAX_LEN = 512
         # 32 is whitespace
-        dir_tensor = torch.full((MAX_LEN, ),
+        dir_tensor = torch.full((MAX_LEN,),
                                 32,
                                 dtype=torch.uint8,
                                 device='cuda')
@@ -102,9 +101,21 @@ def collect_results(result_part, size, tmpdir=None):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='MMDet test detector')
-    parser.add_argument('--config', help='test config file path', default="configs/fast_mask_rcnn_r101_fpn_1x.py")
-    parser.add_argument('--checkpoint', help='checkpoint file', default="checkpoints/mask_rcnn_r101_fpn_1x_20181129-34ad1961.pth")
-    parser.add_argument('--out', help='output result file')
+    # parser.add_argument('--config', help='test config file path', default="configs/fast_mask_rcnn_r101_fpn_1x.py")
+    # parser.add_argument('--checkpoint', help='checkpoint file', default="checkpoints/mask_rcnn_r101_fpn_1x_20181129-34ad1961.pth")
+
+    parser.add_argument('--config', help='train config file path',
+                        default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/fcos/fcos_r50_caffe_fpn_gn_1x_4gpu.py")))
+    parser.add_argument('--checkpoint', help='checkpoint file',
+                        default="https://s3.ap-northeast-2.amazonaws.com/open-mmlab/mmdetection/models/fcos/fcos_r50_caffe_fpn_gn_1x_4gpu_20190516-9f253a93.pth")
+
+    # parser.add_argument('--config', help='train config file path',
+    #                     default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../configs/retinanet_r50_fpn_1x.py")))
+    # parser.add_argument('--checkpoint', help='checkpoint file',
+    #                     default="https://open-mmlab.s3.ap-northeast-2.amazonaws.com/mmdetection/models/retinanet_r50_fpn_2x_20190616-75574209.pth")
+
+    parser.add_argument('--out', help='output result file',
+                        default=os.path.expanduser(os.path.join(os.path.dirname(__file__), "../outs/result.pkl")))
     parser.add_argument(
         '--eval',
         type=str,
@@ -160,7 +171,7 @@ def main():
     checkpoint = load_checkpoint(model, args.checkpoint, map_location='cpu')
     # old versions did not save class info in checkpoints, this walkaround is
     # for backward compatibility
-    if 'CLASSES' in checkpoint['meta']:
+    if 'meta' in checkpoint and 'CLASSES' in checkpoint['meta']:
         model.CLASSES = checkpoint['meta']['CLASSES']
     else:
         model.CLASSES = dataset.CLASSES
