@@ -95,7 +95,7 @@ data = dict(
         with_mask=False,
         with_label=False,
         test_mode=True,
-        limit=10000))
+        limit=None))
 # optimizer
 optimizer = dict(
     type='SGD',
